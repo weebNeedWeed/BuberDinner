@@ -1,5 +1,8 @@
-﻿using Application.Services.Authentication;
+﻿using Application.Authentication.Commands.Register;
+using Application.Authentication.Common;
+using Application.Authentication.Queries.Login;
 using Contracts.Authentication;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -7,21 +10,22 @@ namespace API.Controllers;
 [Route("auth")]
 public class AuthenticationController : ApiController
 {
-    private readonly IAuthenticationService _authenticationService;
+    private readonly ISender _mediator;
 
-    public AuthenticationController(IAuthenticationService authenticationService)
+    public AuthenticationController(ISender mediator)
     {
-        _authenticationService = authenticationService;
+        _mediator = mediator;
     }
 
     [HttpPost("register")]
-    public IActionResult Register(RegisterRequest request)
+    public async Task<IActionResult> Register(RegisterRequest request)
     {
-        var registerResult = _authenticationService.Register(
+        var command = new RegisterCommand(
             request.FirstName,
             request.LastName,
             request.Email,
             request.Password);
+        var registerResult = await _mediator.Send(command);
 
         return registerResult.Match(
             authResult => Ok(MapAuthResult(authResult)),
@@ -29,11 +33,13 @@ public class AuthenticationController : ApiController
     }
 
     [HttpPost("login")]
-    public IActionResult Login(LoginRequest request)
+    public async Task<IActionResult> Login(LoginRequest request)
     {
-        var loginResult = _authenticationService.Login(
+        var query = new LoginQuery(
             request.Email,
             request.Password);
+
+        var loginResult = await _mediator.Send(query);
 
         return loginResult.Match(
             authResult => Ok(MapAuthResult(authResult)),
