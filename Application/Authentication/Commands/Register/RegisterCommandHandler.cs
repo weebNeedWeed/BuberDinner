@@ -19,11 +19,12 @@ public class RegisterCommandHandler: IRequestHandler<RegisterCommand, ErrorOr<Au
         _userRepository = userRepository;
     }
 
-    public Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
+    public async Task<ErrorOr<AuthenticationResult>> Handle(RegisterCommand command, CancellationToken cancellationToken)
     {
+        await Task.CompletedTask;
         if (_userRepository.FindByEmail(command.Email) is not null)
         {
-            return Task.FromResult<ErrorOr<AuthenticationResult>>(Errors.User.DuplicateEmail);
+            return Errors.User.DuplicateEmail;
         }
         
         var user = new User
@@ -38,8 +39,6 @@ public class RegisterCommandHandler: IRequestHandler<RegisterCommand, ErrorOr<Au
         _userRepository.Add(user);
         var token = _jwtTokenGenerator.GenerateToken(user);
 
-        return Task.FromResult<ErrorOr<AuthenticationResult>>(new AuthenticationResult(
-            user,
-            token));
+        return new AuthenticationResult(user, token);
     }
 }
