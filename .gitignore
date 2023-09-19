@@ -379,7 +379,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-vscode
+.vscode
 
 # Local History for Visual Studio Code
 .history/
