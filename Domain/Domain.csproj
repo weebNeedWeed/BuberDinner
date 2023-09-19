@@ -10,7 +10,23 @@
 
     <ItemGroup>
       <PackageReference Include="ErrorOr" Version="1.2.1" />
+
+
+
     </ItemGroup>
+
+
+
+    <ItemGroup>
+      <Folder Include="Guest\Entities\" />
+      <Folder Include="Host\ValueObjects\" />
+    </ItemGroup>
+
+
+
+
+
+
 
 
 

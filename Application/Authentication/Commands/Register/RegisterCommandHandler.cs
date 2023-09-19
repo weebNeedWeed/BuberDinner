@@ -2,13 +2,12 @@
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.Persistence;
 using Domain.Common.Errors;
-using Domain.Entities;
 using MediatR;
 using ErrorOr;
 
 namespace Application.Authentication.Commands.Register;
 
-public class RegisterCommandHandler: IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
+public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<AuthenticationResult>>
 {
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
     private readonly IUserRepository _userRepository;
@@ -26,19 +25,21 @@ public class RegisterCommandHandler: IRequestHandler<RegisterCommand, ErrorOr<Au
         {
             return Errors.User.DuplicateEmail;
         }
-        
-        var user = new User
-        {
-            Id = Guid.NewGuid(),
-            FirstName = command.FirstName,
-            LastName = command.LastName,
-            Email = command.Email,
-            Password = command.Password
-        };
 
-        _userRepository.Add(user);
-        var token = _jwtTokenGenerator.GenerateToken(user);
+        // var user = new User
+        // {
+        //     Id = Guid.NewGuid(),
+        //     FirstName = command.FirstName,
+        //     LastName = command.LastName,
+        //     Email = command.Email,
+        //     Password = command.Password
+        // };
 
-        return new AuthenticationResult(user, token);
+        // _userRepository.Add(user);
+        // var token = _jwtTokenGenerator.GenerateToken(user);
+
+        // return new AuthenticationResult(user, token);
+
+        return new AuthenticationResult(null, "");
     }
 }
