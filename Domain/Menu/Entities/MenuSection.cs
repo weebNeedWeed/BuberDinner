@@ -1,26 +1,37 @@
-﻿using System.Diagnostics.Contracts;
-using Domain.Common.Models;
+﻿using Domain.Common.Models;
 using Domain.Menu.ValueObjects;
 
 namespace Domain.Menu.Entities;
 
 public sealed class MenuSection : Entity<MenuSectionId>
 {
-    private readonly List<MenuItem> _menuItems = new();
+    private readonly List<MenuItem> _items = new();
 
     public string Name { get; }
     public string Description { get; }
-    public IReadOnlyList<MenuItem> MenuItems => _menuItems.AsReadOnly();
+    public IReadOnlyList<MenuItem> Items => _items.AsReadOnly();
 
-    private MenuSection(MenuSectionId menuSectionId, string name, string description)
+    private MenuSection(
+        MenuSectionId menuSectionId,
+        string name,
+        string description,
+        List<MenuItem> items)
         : base(menuSectionId)
     {
         Name = name;
         Description = description;
+        _items.AddRange(items);
     }
 
-    public static MenuSection Create(string name, string description)
+    public static MenuSection Create(
+        string name,
+        string description,
+        List<MenuItem> items)
     {
-        return new MenuSection(MenuSectionId.CreateUnique(), name, description);
+        return new MenuSection(
+            MenuSectionId.CreateUnique(),
+            name,
+            description,
+            items);
     }
 }

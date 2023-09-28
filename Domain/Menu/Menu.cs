@@ -9,7 +9,7 @@ namespace Domain.Menu;
 
 public sealed class Menu : AggregateRoot<MenuId>
 {
-    private readonly List<MenuSection> _menuSections = new();
+    private readonly List<MenuSection> _sections = new();
     private readonly List<DinnerId> _dinnerIds = new();
     private readonly List<MenuReviewId> _menuReviewIds = new();
 
@@ -20,7 +20,7 @@ public sealed class Menu : AggregateRoot<MenuId>
     public DateTime CreatedDateTime { get; }
     public DateTime UpdatedDateTime { get; }
 
-    public IReadOnlyList<MenuSection> MenuSections => _menuSections.AsReadOnly();
+    public IReadOnlyList<MenuSection> Sections => _sections.AsReadOnly();
     public IReadOnlyList<DinnerId> DinnerIds => _dinnerIds.AsReadOnly();
     public IReadOnlyList<MenuReviewId> MenuReviewIds => _menuReviewIds.AsReadOnly();
 
@@ -29,28 +29,31 @@ public sealed class Menu : AggregateRoot<MenuId>
         string description,
         HostId hostId,
         DateTime createdDateTime,
-        DateTime updatedDateTime) : base(menuId)
+        DateTime updatedDateTime,
+        List<MenuSection> sections) : base(menuId)
     {
         Name = name;
         Description = description;
         HostId = hostId;
         CreatedDateTime = createdDateTime;
         UpdatedDateTime = updatedDateTime;
+
+        _sections.AddRange(sections);
     }
 
     public static Menu Create(
+        HostId hostId,
         string name,
         string description,
-        HostId hostId,
-        DateTime createdDateTime,
-        DateTime updatedDateTime)
+        List<MenuSection> sections)
     {
         return new Menu(
             MenuId.CreateUnique(),
             name,
             description,
             hostId,
-            createdDateTime,
-            updatedDateTime);
+            DateTime.UtcNow,
+            DateTime.UtcNow,
+            sections);
     }
 }

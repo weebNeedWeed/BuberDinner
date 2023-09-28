@@ -1,10 +1,13 @@
 ﻿using System.Text;
+
 using Application.Common.Interfaces.Authentication;
 using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Services;
+
 using Infrastructure.Authentication;
 using Infrastructure.Persistence;
 using Infrastructure.Services;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,12 +20,19 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddAuth(configuration);
-        
-        services.AddSingleton<IUserRepository, UserRepository>();
-        services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
+        services
+            .AddAuth(configuration)
+            .AddPersistence();
+
         services.AddTransient<IDateTimeProvider, DateTimeProvider>();
-        
+
+        return services;
+    }
+
+    public static IServiceCollection AddPersistence(this IServiceCollection services)
+    {
+        services.AddSingleton<IUserRepository, UserRepository>();
+        services.AddSingleton<IMenuRepository, MenuRepository>();
         return services;
     }
 
@@ -33,6 +43,7 @@ public static class DependencyInjection
 
         services.AddSingleton(Options.Create(jwtSettings));
         services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
+        services.AddTransient<IJwtTokenGenerator, JwtTokenGenerator>();
 
         services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(option =>

@@ -33,9 +33,7 @@ public class User : AggregateRoot<UserId>
         string firstName,
         string lastName,
         string email,
-        string password,
-        DateTime createdDateTime,
-        DateTime updatedDateTime)
+        string password)
     {
         return new User(
             UserId.CreateUnique(),
@@ -43,7 +41,7 @@ public class User : AggregateRoot<UserId>
             lastName,
             email,
             password,
-            createdDateTime,
-            updatedDateTime);
+            DateTime.UtcNow,
+            DateTime.UtcNow);
     }
 }

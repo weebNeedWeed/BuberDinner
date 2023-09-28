@@ -4,6 +4,7 @@ using Application.Common.Interfaces.Persistence;
 using Domain.Common.Errors;
 using MediatR;
 using ErrorOr;
+using Domain.User;
 
 namespace Application.Authentication.Commands.Register;
 
@@ -26,20 +27,17 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, ErrorOr<A
             return Errors.User.DuplicateEmail;
         }
 
-        // var user = new User
-        // {
-        //     Id = Guid.NewGuid(),
-        //     FirstName = command.FirstName,
-        //     LastName = command.LastName,
-        //     Email = command.Email,
-        //     Password = command.Password
-        // };
+        var user = User.Create(
+            command.FirstName,
+            command.LastName,
+            command.Email,
+            command.Password);
 
-        // _userRepository.Add(user);
-        // var token = _jwtTokenGenerator.GenerateToken(user);
+        _userRepository.Add(user);
+        var token = _jwtTokenGenerator.GenerateToken(user);
 
-        // return new AuthenticationResult(user, token);
-
-        return new AuthenticationResult(null, "");
+        return new AuthenticationResult(
+            user,
+            token);
     }
 }
