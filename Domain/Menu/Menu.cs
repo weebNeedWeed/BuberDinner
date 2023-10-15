@@ -1,4 +1,5 @@
 ﻿using Domain.Common.Models;
+using Domain.Common.ValueObjects;
 using Domain.Dinner.ValueObjects;
 using Domain.Host.ValueObjects;
 using Domain.Menu.Entities;
@@ -15,7 +16,7 @@ public sealed class Menu : AggregateRoot<MenuId>
 
     public string Name { get; }
     public string Description { get; }
-    public float AverageRating { get; }
+    public AverageRating AverageRating { get; }
     public HostId HostId { get; }
     public DateTime CreatedDateTime { get; }
     public DateTime UpdatedDateTime { get; }
@@ -30,6 +31,7 @@ public sealed class Menu : AggregateRoot<MenuId>
         HostId hostId,
         DateTime createdDateTime,
         DateTime updatedDateTime,
+        AverageRating averageRating,
         List<MenuSection> sections) : base(menuId)
     {
         Name = name;
@@ -37,6 +39,7 @@ public sealed class Menu : AggregateRoot<MenuId>
         HostId = hostId;
         CreatedDateTime = createdDateTime;
         UpdatedDateTime = updatedDateTime;
+        AverageRating = averageRating;
 
         _sections.AddRange(sections);
     }
@@ -54,6 +57,7 @@ public sealed class Menu : AggregateRoot<MenuId>
             hostId,
             DateTime.UtcNow,
             DateTime.UtcNow,
-            sections);
+            AverageRating.Create(0, 0),
+            sections ?? new());
     }
 }

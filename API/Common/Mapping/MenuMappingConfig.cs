@@ -22,6 +22,7 @@ public class MenuMappingConfig : IRegister
         // TODO: Implement AverageRating ValueObject
         config.NewConfig<Menu, MenuResponse>()
             .Map(dest => dest.Id, src => src.Id.Value.ToString())
+            .Map(dest => dest.AverageRating, src => src.AverageRating.NumRatings > 0 ? src.AverageRating.Value : (float?)null)
             .Map(dest => dest.HostId, src => src.HostId.Value.ToString())
             .Map(dest => dest.DinnerIds, src => src.DinnerIds.Select(x => x.Value))
             .Map(dest => dest.MenuReviewIds, src => src.MenuReviewIds.Select(x => x.Value));
