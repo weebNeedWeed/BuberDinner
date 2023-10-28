@@ -6,6 +6,10 @@ public sealed class DinnerId : ValueObject
 {
     public Guid Value { get; }
 
+    private DinnerId()
+    {
+    }
+
     private DinnerId(Guid value)
     {
         Value = value;

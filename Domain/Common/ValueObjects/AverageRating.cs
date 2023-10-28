@@ -4,8 +4,12 @@ namespace Domain.Common.ValueObjects;
 
 public sealed class AverageRating : ValueObject
 {
-    public float Value { get; }
-    public int NumRatings { get; }
+    public float Value { get; private set; }
+    public int NumRatings { get; private set; }
+
+    private AverageRating()
+    {
+    }
 
     private AverageRating(float value, int numRatings)
     {

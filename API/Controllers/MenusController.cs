@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[Route("host/{hostId}/menus")]
+[Route("hosts/{hostId}/menus")]
 public class MenusController : ApiController
 {
     private readonly IMapper _mapper;

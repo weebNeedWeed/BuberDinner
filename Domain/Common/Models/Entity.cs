@@ -5,11 +5,16 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
 {
     public TId Id { get; protected set; }
 
+    protected Entity()
+    {
+
+    }
+
     protected Entity(TId id)
     {
         Id = id;
     }
-    
+
     public override bool Equals(object? other)
     {
         if (other is null)
@@ -34,7 +39,7 @@ public abstract class Entity<TId> : IEquatable<Entity<TId>>
     {
         return Id.GetHashCode();
     }
-    
+
     public bool Equals(Entity<TId>? other)
     {
         return Equals((object?)other);

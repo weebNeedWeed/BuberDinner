@@ -9,6 +9,7 @@ using Infrastructure.Persistence;
 using Infrastructure.Services;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -31,8 +32,11 @@ public static class DependencyInjection
 
     public static IServiceCollection AddPersistence(this IServiceCollection services)
     {
+        services.AddDbContext<BuberDinnerDbContext>(opt =>
+            opt.UseSqlServer("Server=localhost;Database=BuberDinner;User Id=sa;Password=@Admin123;Encrypt=true;TrustServerCertificate=true"));
+
         services.AddSingleton<IUserRepository, UserRepository>();
-        services.AddSingleton<IMenuRepository, MenuRepository>();
+        services.AddScoped<IMenuRepository, MenuRepository>();
         return services;
     }
 

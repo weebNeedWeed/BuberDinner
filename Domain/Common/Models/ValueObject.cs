@@ -2,6 +2,11 @@
 
 public abstract class ValueObject : IEquatable<ValueObject>
 {
+    protected ValueObject()
+    {
+
+    }
+
     protected abstract IEnumerable<object> GetEqualityComponents();
 
     public bool Equals(ValueObject? other)
@@ -39,8 +44,8 @@ public abstract class ValueObject : IEquatable<ValueObject>
 
     public static bool operator ==(ValueObject? left, ValueObject? right)
     {
-        return left is not null 
-               && right is not null 
+        return left is not null
+               && right is not null
                && left.Equals(right);
     }
 
